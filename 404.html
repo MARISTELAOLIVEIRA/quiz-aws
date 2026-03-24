@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 - Acesso Negado</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    :root{
+      --bg:#050816;
+      --panel:#0b1023;
+      --border:#2ef2ff44;
+      --cyan:#2ef2ff;
+      --pink:#ff2fd1;
+      --red:#ff4d6d;
+      --text:#e8f7ff;
+      --muted:#9fc8d8;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:'Courier New', monospace;
+    }
+
+    body{
+      min-height:100vh;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(46,242,255,.10), transparent 25%),
+        radial-gradient(circle at top right, rgba(255,47,209,.08), transparent 25%),
+        linear-gradient(135deg, #030612, #08101f 50%, #030612);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* Scanlines effect */
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+      background:repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,.15) 0px,
+        transparent 1px,
+        transparent 2px,
+        rgba(0,0,0,.15) 3px
+      );
+      pointer-events:none;
+      z-index:999;
+      animation:scanlines 8s linear infinite;
+    }
+
+    @keyframes scanlines{
+      0%{transform:translateY(0);}
+      100%{transform:translateY(10px);}
+    }
+
+    /* Glitch grid background */
+    .grid{
+      position:fixed;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(46,242,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(46,242,255,.03) 1px, transparent 1px);
+      background-size:50px 50px;
+      animation:grid-flicker 3s ease-in-out infinite;
+      opacity:0.5;
+    }
+
+    @keyframes grid-flicker{
+      0%, 100%{opacity:0.5;}
+      50%{opacity:0.2;}
+    }
+
+    .container{
+      position:relative;
+      z-index:10;
+      text-align:center;
+      padding:40px 20px;
+      max-width:800px;
+    }
+
+    .error-code{
+      font-size:clamp(80px, 20vw, 180px);
+      font-weight:bold;
+      line-height:1;
+      margin-bottom:20px;
+      background:linear-gradient(135deg, var(--cyan), var(--pink));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      text-shadow:0 0 40px rgba(46,242,255,.5);
+      position:relative;
+      animation:glitch 3s infinite;
+    }
+
+    @keyframes glitch{
+      0%, 90%, 100%{
+        transform:translate(0);
+        filter:none;
+      }
+      92%{
+        transform:translate(-2px, 2px);
+        filter:hue-rotate(90deg);
+      }
+      94%{
+        transform:translate(2px, -2px);
+        filter:hue-rotate(-90deg);
+      }
+      96%{
+        transform:translate(-2px, -2px);
+      }
+    }
+
+    .lock-icon{
+      font-size:clamp(60px, 15vw, 120px);
+      margin-bottom:30px;
+      filter:drop-shadow(0 0 20px var(--cyan));
+      animation:pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse{
+      0%, 100%{
+        transform:scale(1);
+        filter:drop-shadow(0 0 20px var(--cyan));
+      }
+      50%{
+        transform:scale(1.05);
+        filter:drop-shadow(0 0 30px var(--pink));
+      }
+    }
+
+    h1{
+      font-size:clamp(24px, 6vw, 42px);
+      margin-bottom:15px;
+      text-transform:uppercase;
+      letter-spacing:3px;
+      color:var(--cyan);
+      text-shadow:0 0 10px rgba(46,242,255,.5);
+    }
+
+    .message{
+      font-size:clamp(14px, 3vw, 18px);
+      color:var(--muted);
+      margin-bottom:10px;
+      line-height:1.6;
+    }
+
+    .code-block{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:8px;
+      padding:20px;
+      margin:30px auto;
+      max-width:600px;
+      text-align:left;
+      font-family:'Courier New', monospace;
+      font-size:14px;
+      box-shadow:0 0 20px rgba(46,242,255,.1);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .code-block::before{
+      content:'';
+      position:absolute;
+      top:-2px;
+      left:-2px;
+      right:-2px;
+      bottom:-2px;
+      background:linear-gradient(135deg, var(--cyan), var(--pink));
+      border-radius:8px;
+      opacity:0.1;
+      z-index:-1;
+    }
+
+    .code-line{
+      margin:8px 0;
+      color:var(--text);
+    }
+
+    .code-line .key{
+      color:var(--pink);
+    }
+
+    .code-line .value{
+      color:var(--cyan);
+    }
+
+    .code-line .string{
+      color:var(--muted);
+    }
+
+    .btn-home{
+      display:inline-block;
+      margin-top:30px;
+      padding:15px 40px;
+      background:transparent;
+      border:2px solid var(--cyan);
+      border-radius:4px;
+      color:var(--cyan);
+      text-decoration:none;
+      font-size:16px;
+      font-weight:bold;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      transition:all 0.3s ease;
+      position:relative;
+      overflow:hidden;
+      cursor:pointer;
+    }
+
+    .btn-home::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, var(--cyan), var(--pink));
+      opacity:0;
+      transition:opacity 0.3s ease;
+      z-index:-1;
+    }
+
+    .btn-home:hover{
+      color:var(--bg);
+      border-color:var(--pink);
+      box-shadow:0 0 20px rgba(46,242,255,.5), 0 0 40px rgba(255,47,209,.3);
+    }
+
+    .btn-home:hover::before{
+      opacity:1;
+    }
+
+    .terminal-cursor{
+      display:inline-block;
+      width:10px;
+      height:20px;
+      background:var(--cyan);
+      animation:blink 1s step-end infinite;
+      margin-left:5px;
+      vertical-align:middle;
+    }
+
+    @keyframes blink{
+      50%{opacity:0;}
+    }
+
+    /* Floating particles */
+    .particle{
+      position:fixed;
+      width:2px;
+      height:2px;
+      background:var(--cyan);
+      border-radius:50%;
+      opacity:0.5;
+      animation:float 10s linear infinite;
+    }
+
+    @keyframes float{
+      0%{
+        transform:translateY(100vh) translateX(0);
+        opacity:0;
+      }
+      10%{opacity:0.5;}
+      90%{opacity:0.5;}
+      100%{
+        transform:translateY(-100vh) translateX(100px);
+        opacity:0;
+      }
+    }
+
+    @media (max-width:768px){
+      .code-block{
+        font-size:12px;
+        padding:15px;
+      }
+      
+      h1{
+        letter-spacing:2px;
+      }
+      
+      .btn-home{
+        padding:12px 30px;
+        font-size:14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+  
+  <div class="container">
+    <div class="lock-icon">🔒</div>
+    <div class="error-code">404</div>
+    <h1>Acesso Negado</h1>
+    <p class="message">A página que você procura não foi encontrada ou está protegida.</p>
+    <p class="message">Verifique as permissões de acesso ou retorne à página inicial.</p>
+    
+    <div class="code-block">
+      <div class="code-line"><span class="key">Error:</span> <span class="value">"ResourceNotFound"</span></div>
+      <div class="code-line"><span class="key">StatusCode:</span> <span class="value">404</span></div>
+      <div class="code-line"><span class="key">Message:</span> <span class="string">"O recurso solicitado não existe"</span></div>
+      <div class="code-line"><span class="key">Location:</span> <span class="string">"AWS Region: Desconhecida"</span></div>
+      <div class="code-line"><span class="key">Timestamp:</span> <span class="value" id="timestamp"></span></div>
+      <div class="code-line"><span class="key">Suggestion:</span> <span class="string">"Verifique a URL ou retorne ao início"</span><span class="terminal-cursor"></span></div>
+    </div>
+    
+    <a href="index.html" class="btn-home">Voltar ao Início</a>
+  </div>
+
+  <script>
+    // Add timestamp
+    document.getElementById('timestamp').textContent = new Date().toISOString();
+
+    // Create floating particles
+    for(let i = 0; i < 20; i++){
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 10 + 's';
+      particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+      if(Math.random() > 0.5){
+        particle.style.background = '#ff2fd1';
+      }
+      document.body.appendChild(particle);
+    }
+
+    // Random glitch effect on error code
+    const errorCode = document.querySelector('.error-code');
+    setInterval(() => {
+      if(Math.random() > 0.95){
+        errorCode.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
+        setTimeout(() => {
+          errorCode.style.transform = 'translate(0, 0)';
+        }, 50);
+      }
+    }, 100);
+  </script>
+</body>
+</html>
